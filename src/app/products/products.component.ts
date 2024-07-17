@@ -55,7 +55,7 @@ export class ProductsComponent {
   }
 
   addtocart(data: any) {
-    this.cartService.addItemsinCart(data)
+    this.cartService.addtoCart(data)
   }
 
   

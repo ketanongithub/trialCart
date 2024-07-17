@@ -17,7 +17,7 @@
                         </tr>
                     </thead>
                     <tbody>
-                        @for (item of products; track item; let i = $index, e = $even) { 
+                        @for (item of products; track item.id; let i = $index, e = $even) { 
                         <tr>
                             <td>{{i+1}}</td>
                             <td>{{item.title}}</td>

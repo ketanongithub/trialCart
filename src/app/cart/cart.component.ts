@@ -9,21 +9,17 @@ import { CartService } from '../service/cart.service';
   styleUrl: './cart.component.css'
 })
 export class CartComponent {
-
-  public products: any = [];
+ public products : any = [];
   public grandTotal !: number;
-
-  constructor(private cartService: CartService) { }
+  constructor(private cartService : CartService) { }
 
   ngOnInit(): void {
-    this.products = this.cartService.getProducts();
-    this.grandTotal = this.cartService.getTotalPrice();
-
-    console.log("CartComponent PRODUCT", this.products);
-    console.log("CartComponent grandTotal", this.grandTotal)
-
+    this.cartService.getProducts()
+    .subscribe(res=>{
+      this.products = res;
+      this.grandTotal = this.cartService.getTotalPrice();
+    })
   }
-
   removeItem(item: any){
     this.cartService.removeCartItem(item);
   }

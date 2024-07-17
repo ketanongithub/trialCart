@@ -6,44 +6,44 @@ import { Observable } from 'rxjs/internal/Observable';
   providedIn: 'root'
 })
 export class CartService {
+  public cartItemList : any =[]
+  public productList = new BehaviorSubject<any>([]);
   public search = new BehaviorSubject<string>("");
-  cartItemsList:any[] = [];
-  //private searchSubject = new BehaviorSubject<string>('');
-  //public search$: Observable<string> = this.searchSubject.asObservable();
+
   constructor() { }
-
-  // search(term: string) {
-  //   this.searchSubject.next(term);
-  // }
-
-  addItemsinCart(item:any){
-    this.cartItemsList.push(item);
-    this.getTotalPrice();
+  getProducts(){
+    return this.productList.asObservable();
   }
 
+  setProduct(product : any){
+    this.cartItemList.push(...product);
+    this.productList.next(product);
+  }
+  addtoCart(product : any){
+    this.cartItemList.push(product);
+    this.productList.next(this.cartItemList);
+    this.getTotalPrice();
+    console.log(this.cartItemList)
+  }
   getTotalPrice() : number{
     let grandTotal = 0;
-    this.cartItemsList.map((a:any)=>{
+    debugger;
+    this.cartItemList.map((a:any)=>{
       grandTotal += a.total;
     })
     return grandTotal;
   }
-
-  getProducts():any[] {
-    return this.cartItemsList;
-  }
-
   removeCartItem(product: any){
-    this.cartItemsList.map((a:any, index:any)=>{
+    this.cartItemList.map((a:any, index:any)=>{
       if(product.id=== a.id){
-        this.cartItemsList.splice(index,1);
+        this.cartItemList.splice(index,1);
       }
     })
-    //this.productList.next(this.cartItemList);
+    this.productList.next(this.cartItemList);
   }
   removeAllCart(){
-    this.cartItemsList = []
-    //this.productList.next(this.cartItemList);
+    this.cartItemList = []
+    this.productList.next(this.cartItemList);
   }
   
 }
