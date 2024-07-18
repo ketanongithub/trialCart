@@ -1,49 +1,46 @@
-import { Injectable } from '@angular/core';
+import { computed, Injectable, signal } from '@angular/core';
 import { BehaviorSubject } from 'rxjs/internal/BehaviorSubject';
-import { Observable } from 'rxjs/internal/Observable';
 
 @Injectable({
   providedIn: 'root'
 })
 export class CartService {
-  public cartItemList : any =[]
-  public productList = new BehaviorSubject<any>([]);
+  public cartItemList = signal<any[]>([]);
+  public productList = signal<any[]>([]);
+  //private search = signal<string>('');
   public search = new BehaviorSubject<string>("");
+  public totalItems = computed(() => this.productList().length);
 
-  constructor() { }
-  getProducts(){
-    return this.productList.asObservable();
+
+  getProducts(): any{
+    return this.productList.asReadonly();
   }
 
-  setProduct(product : any){
-    this.cartItemList.push(...product);
-    this.productList.next(product);
-  }
-  addtoCart(product : any){
-    this.cartItemList.push(product);
-    this.productList.next(this.cartItemList);
+  addtoCart(product: any) {
+    this.cartItemList.update((items) => [...items, product]);
+    this.productList.set(this.cartItemList());
     this.getTotalPrice();
-    console.log(this.cartItemList)
   }
-  getTotalPrice() : number{
+
+  getTotalPrice(): number {
     let grandTotal = 0;
-    debugger;
-    this.cartItemList.map((a:any)=>{
+    this.cartItemList().forEach((a) => {
       grandTotal += a.total;
-    })
+    });
     return grandTotal;
   }
-  removeCartItem(product: any){
-    this.cartItemList.map((a:any, index:any)=>{
-      if(product.id=== a.id){
-        this.cartItemList.splice(index,1);
-      }
-    })
-    this.productList.next(this.cartItemList);
+
+  removeCartItem(product: any) {
+    this.cartItemList.update(val => {
+      val.splice(product, 1);
+      return val;
+    });
+    this.productList.set(this.cartItemList());
+
   }
-  removeAllCart(){
-    this.cartItemList = []
-    this.productList.next(this.cartItemList);
+
+  removeAllCart() {
+    this.cartItemList.set([]);
+    this.productList.set([]);
   }
-  
 }

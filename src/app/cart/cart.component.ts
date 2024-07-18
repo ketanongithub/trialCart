@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, signal } from '@angular/core';
 import { CartService } from '../service/cart.service';
 
 @Component({
@@ -9,22 +9,23 @@ import { CartService } from '../service/cart.service';
   styleUrl: './cart.component.css'
 })
 export class CartComponent {
- public products : any = [];
-  public grandTotal !: number;
-  constructor(private cartService : CartService) { }
+  //products = signal<any>([]);
+  grandTotal = signal<number>(0);
+
+  constructor(public cartService: CartService) {}
 
   ngOnInit(): void {
-    this.cartService.getProducts()
-    .subscribe(res=>{
-      this.products = res;
-      this.grandTotal = this.cartService.getTotalPrice();
-    })
-  }
-  removeItem(item: any){
-    this.cartService.removeCartItem(item);
-  }
-  emptycart(){
-    this.cartService.removeAllCart();
+    
+     // this.products.set(this.cartService.getProducts());
+      this.grandTotal.set(this.cartService.getTotalPrice());
+   
   }
 
+  removeItem(item: any) {
+    this.cartService.removeCartItem(item);
+  }
+
+  emptycart() {
+    this.cartService.removeAllCart();
+  }
 }

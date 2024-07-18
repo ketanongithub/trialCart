@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { CartService } from '../service/cart.service';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
@@ -11,9 +11,19 @@ import { RouterLink, RouterLinkActive } from '@angular/router';
   templateUrl: './header.component.html',
   styleUrl: './header.component.css'
 })
-export class HeaderComponent {
+export class HeaderComponent implements OnInit {
+  //public totalItem : number = 0;
   public searchTerm !: string;
-  constructor(private cartService : CartService) { }
+  constructor(public cartService : CartService) { }
+
+  ngOnInit(): void {
+    // this.cartService.getProducts()
+    // .subscribe(res=>{
+    //   this.totalItem = res.length;
+    // })
+
+  
+  }
 
   search(event:any){
     this.searchTerm = (event.target as HTMLInputElement).value;
