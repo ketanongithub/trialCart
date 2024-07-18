@@ -12,15 +12,15 @@ import { RouterLink, RouterLinkActive } from '@angular/router';
   styleUrl: './header.component.css'
 })
 export class HeaderComponent implements OnInit {
-  //public totalItem : number = 0;
+  public totalItem : number = 0;
   public searchTerm !: string;
   constructor(public cartService : CartService) { }
 
   ngOnInit(): void {
-    // this.cartService.getProducts()
-    // .subscribe(res=>{
-    //   this.totalItem = res.length;
-    // })
+    this.cartService.getProducts()
+    .subscribe(res=>{
+      this.totalItem = res.length;
+    })
 
   
   }

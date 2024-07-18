@@ -9,17 +9,19 @@ import { CartService } from '../service/cart.service';
   styleUrl: './cart.component.css'
 })
 export class CartComponent {
-  //products = signal<any>([]);
-  grandTotal = signal<number>(0);
+  public products : any = [];
+  public grandTotal !: number;
 
-  constructor(public cartService: CartService) {}
+  constructor(private cartService : CartService) { }
 
   ngOnInit(): void {
-    
-     // this.products.set(this.cartService.getProducts());
-      this.grandTotal.set(this.cartService.getTotalPrice());
-   
+   this.cartService.getProducts()
+    .subscribe(res=>{
+      this.products = res;
+      this.grandTotal = this.cartService.getTotalPrice();
+    })
   }
+    
 
   removeItem(item: any) {
     this.cartService.removeCartItem(item);
